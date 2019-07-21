@@ -11,22 +11,10 @@ Globals:
     Timeout: 10
 
 Resources:
-  # HelloWorldFunction:
-  #   Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-  #   Properties:
-  #     CodeUri: hello-world/
-  #     Handler: app.lambdaHandler
-  #     Runtime: nodejs10.x
-  #     Events:
-  #       HelloWorld:
-  #         Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-  #         Properties:
-  #           Path: /hello
-  #           Method: get
-  ApiFunction:
+  MovieApiFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: api/
+      CodeUri: movie-api/
       Handler: app.lambdaHandler
       Runtime: nodejs10.x
       Environment:
@@ -36,51 +24,26 @@ Resources:
         List:
           Type: Api
           Properties:
-            Path: /
-            Method: get
-        Get:
-          Type: Api
-          Properties:
-            Path: /{id}
+            Path: /movies
             Method: get
         Create:
           Type: Api
           Properties:
-            Path: /create
+            Path: /movies/create
             Method: post
-        Update:
-          Type: Api
-          Properties:
-            Path: /update/{id}
-            Method: put
         Destroy:
           Type: Api
           Properties:
-            Path: /create
+            Path: /movies/{id}/delete
             Method: delete
-        
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
- 
-  # HelloWorldApi:
-  #   Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-  #   Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  # HelloWorldFunction:
-  #   Description: "Hello World Lambda Function ARN"
-  #   Value: !GetAtt HelloWorldFunction.Arn
-  # HelloWorldFunctionIamRole:
-  #   Description: "Implicit IAM Role created for Hello World function"
-  #   Value: !GetAtt HelloWorldFunctionRole.Arn
-
-  ApiApi:
-    Description: "API Gateway endpoint URL for Prod stage for API function"
+  MovieApi:
+    Description: "API Gateway endpoint URL for Prod stage for Movie API function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/api/"
-  ApiFunction:
-    Description: "API Lambda Function ARN"
-    Value: !GetAtt ApiFunction.Arn
-  ApiFunctionIamRole:
-    Description: "Implicit IAM Role created for API function"
-    Value: !GetAtt ApiFunctionRole.Arn
+  MovieApiFunction:
+    Description: "Movie API Lambda Function ARN"
+    Value: !GetAtt MovieApiFunction.Arn
+  MovieApiFunctionIamRole:
+    Description: "Implicit IAM Role created for Movie API function"
+    Value: !GetAtt MovieApiFunctionRole.Arn
