@@ -9,10 +9,24 @@ $ sam validate --template template.yaml
 2019-07-20 16:41:47 Found credentials in shared credentials file: ~/.aws/credentials
 ```
 
-## usage
+## setup
 
+start DynamoDB local
 
+```
+$ docker-compose up
+```
 
+create table
+
+```
+$ export DYNAMODB_LOCAL_ENDPOINT=http://192.168.1.3:8002
+$ node api/create_table.js
+```
+
+## ref
+
+[Node.js と DynamoDB](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.01.html)
 
 ---
 
@@ -35,10 +49,10 @@ This is a sample template for aws-sam-rest-api - Below is a brief explanation of
 
 ## Requirements
 
-* AWS CLI already configured with Administrator permission
-* [NodeJS 10.10+ installed](https://nodejs.org/en/download/releases/)
+- AWS CLI already configured with Administrator permission
+- [NodeJS 10.10+ installed](https://nodejs.org/en/download/releases/)
 
-* [Docker installed](https://www.docker.com/community-edition)
+- [Docker installed](https://www.docker.com/community-edition)
 
 ## Setup process
 
@@ -49,7 +63,7 @@ This is a sample template for aws-sam-rest-api - Below is a brief explanation of
 ```bash
 sam local invoke HelloWorldFunction --event event.json
 ```
- 
+
 **Invoking function locally through local API Gateway**
 
 ```bash
@@ -61,13 +75,13 @@ If the previous command ran successfully you should now be able to hit the follo
 **SAM CLI** is used to emulate both Lambda and API Gateway locally and uses our `template.yaml` to understand how to bootstrap this environment (runtime, where the source code is, etc.) - The following excerpt is what the CLI will read in order to initialize an API and its routes:
 
 ```yaml
-...
+---
 Events:
-    HelloWorld:
-        Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-        Properties:
-            Path: /hello
-            Method: get
+  HelloWorld:
+    Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+    Properties:
+      Path: /hello
+      Method: get
 ```
 
 ## Packaging and deployment
@@ -115,7 +129,7 @@ aws cloudformation describe-stacks \
     --stack-name aws-sam-rest-api \
     --query 'Stacks[].Outputs[?OutputKey==`HelloWorldApi`]' \
     --output table
-``` 
+```
 
 ## Fetch, tail, and filter Lambda function logs
 
@@ -153,19 +167,19 @@ Here are a few things you can try to get more acquainted with building serverles
 
 ### Learn how SAM Build can help you with dependencies
 
-* Uncomment lines on `app.js`
-* Build the project with ``sam build --use-container``
-* Invoke with ``sam local invoke HelloWorldFunction --event event.json``
-* Update tests
+- Uncomment lines on `app.js`
+- Build the project with `sam build --use-container`
+- Invoke with `sam local invoke HelloWorldFunction --event event.json`
+- Update tests
 
 ### Create an additional API resource
 
-* Create a catch all resource (e.g. /hello/{proxy+}) and return the name requested through this new path
-* Update tests
+- Create a catch all resource (e.g. /hello/{proxy+}) and return the name requested through this new path
+- Update tests
 
 ### Step-through debugging
 
-* **[Enable step-through debugging docs for supported runtimes]((https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-using-debugging.html))**
+- **[Enable step-through debugging docs for supported runtimes](<(https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-using-debugging.html)>)**
 
 Next, you can use AWS Serverless Application Repository to deploy ready to use Apps that go beyond hello world samples and learn how authors developed their applications: [AWS Serverless Application Repository main page](https://aws.amazon.com/serverless/serverlessrepo/)
 
@@ -181,6 +195,7 @@ sam build
 ```
 
 If your dependencies contain native modules that need to be compiled specifically for the operating system running on AWS Lambda, use this command to build inside a Lambda-like Docker container instead:
+
 ```bash
 sam build --use-container
 ```

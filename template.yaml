@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 5
+    Timeout: 10
 
 Resources:
   # HelloWorldFunction:
@@ -29,6 +29,9 @@ Resources:
       CodeUri: api/
       Handler: app.lambdaHandler
       Runtime: nodejs10.x
+      Environment:
+        Variables:
+          DYNAMODB_LOCAL_ENDPOINT: 'http://192.168.1.3:8002'
       Events:
         List:
           Type: Api
