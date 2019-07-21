@@ -5,23 +5,30 @@ AWS.config.update({
   endpoint: process.env.DYNAMODB_LOCAL_ENDPOINT,
 });
 
+console.log("DYNAMODB_LOCAL_ENDPOINT", process.env.DYNAMODB_LOCAL_ENDPOINT);
+
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.lambdaHandler = async (event, context) => {
   try {
     let result = null;
 
-    if (event.httpMethod === 'POST' && event.path === '/create') {
+    console.log("event.httpMethod", event.httpMethod)
+    console.log("event.path", event.path)
+    console.log("result", result)
+
+    if (event.httpMethod === 'POST' && event.path === '/movies/create') {
       result = await createRecord(event);
-    } else if (event.httpMethod === 'GET' && event.path === '/') {
+    } else if (event.httpMethod === 'GET' && event.path === '/movies') {
       result = await listRecords();
     }
 
-    console.log("result", result)
-
     response = {
-      message: 'success',
-      result: result
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'success',
+        result
+      })
     };
   } catch (err) {
     console.error(err);
@@ -42,7 +49,7 @@ async function listRecords() {
 async function createRecord(event) {
   const params = {
     TableName: 'Movies',
-    Item: event.body
+    Item: JSON.parse(event.body)
   };
 
   return await docClient

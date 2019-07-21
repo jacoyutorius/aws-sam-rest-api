@@ -24,6 +24,27 @@ $ export DYNAMODB_LOCAL_ENDPOINT=http://192.168.1.3:8002
 $ node api/create_table.js
 ```
 
+## start-api
+
+```
+$ sam local start-api
+2019-07-21 22:43:03 Mounting MovieApiFunction at http://127.0.0.1:3000/movies/{id}/delete [DELETE]
+2019-07-21 22:43:03 Mounting MovieApiFunction at http://127.0.0.1:3000/movies/create [POST]
+2019-07-21 22:43:03 Mounting MovieApiFunction at http://127.0.0.1:3000/movies [GET]
+2019-07-21 22:43:03 You can now browse to the above endpoints to invoke your functions. You do not need to restart/reload SAM CLI while working on your functions, changes will be reflected instantly/automatically. You only need to restart SAM CLI if you update your AWS SAM template
+2019-07-21 22:43:03  * Running on http://127.0.0.1:3000/ (Press CTRL+C to quit)
+```
+
+```
+$ curl -XPOST http://127.0.0.1:3000/movies/create -d '{"year":2019, "title":"アラジン"}'
+{"message":"success","result":{}}
+```
+
+```
+$ curl -XGET http://127.0.0.1:3000/movies
+{"message":"success","result":{"Items":[{"title":"title","year":2019},{"title":"アベンジャーズ/エンドゲーム","year":2019,"url":"https://marvel.disney.co.jp/movie/avengers-endgame.html"},{"title":"アラジン","year":2019}],"Count":3,"ScannedCount":3}}
+```
+
 ## ref
 
 [Node.js と DynamoDB](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.01.html)
